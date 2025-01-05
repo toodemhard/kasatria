@@ -37,7 +37,7 @@
 	</div>
 
 	<script type="module">
-		function onSignIn(response) {
+		window.onSignIn = function(response) {
 			console.log(import.meta.env.BASE_URL + "periodic_table");
 			window.location.pathname = import.meta.env.BASE_URL + "periodic_table"
 		}
