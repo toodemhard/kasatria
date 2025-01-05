@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import TWEEN from 'three/addons/libs/tween.module.js';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+import { lerp } from 'three/src/math/MathUtils.js';
 
 let camera, scene, renderer;
 let controls;
@@ -12,6 +13,43 @@ const targets = { table: [], sphere: [], helix: [], grid: [] };
 
 await init();
 animate();
+
+function currency_string_to_number(string) {
+    const clean = string.slice(1).replaceAll(",", "");
+    return parseFloat(clean);
+
+}
+
+function hex_to_rgb(hex) {
+    return {
+        r: parseInt(hex.substring(0,2), 16),
+        g: parseInt(hex.substring(2,4), 16),
+        b: parseInt(hex.substring(4), 16),
+    };
+}
+
+function lerp_rgb(a, b, t) {
+    return {
+        r: lerp(a.r, b.r, t),
+        g: lerp(a.g, b.g, t),
+        b: lerp(a.b, b.b, t),
+    }
+}
+
+function networth_color(networth) {
+    const red = hex_to_rgb("EF3022")
+    const orange = hex_to_rgb("FDCA35");
+    const green = hex_to_rgb("3A9F48")
+
+    if (networth > 200_000) {
+        return green;
+    } else if (networth > 100_000) {
+        return lerp_rgb(orange, green, (networth - 100_000) / 100_000);
+    } else {
+        return lerp_rgb(red, orange, networth / 100_000);
+    }
+
+}
 
 function parse_csv_line(line) {
     let values = [];
@@ -73,6 +111,8 @@ async function init() {
         return object;
     });
 
+    console.log(currency_string_to_number(data[2]["Net Worth"]));
+
     // const data = rows.map(row => {
     //     const values = row.split(",");
     // })
@@ -94,7 +134,9 @@ async function init() {
         
         const element = document.createElement('div');
         element.className = 'element';
-        element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')';
+
+        let color = networth_color(currency_string_to_number(data[i]["Net Worth"]));
+        element.style.backgroundColor = `rgba(${color.r},${color.g},${color.b},255)`;
 
         const container = document.createElement("div");
         container.className = "container";
@@ -118,7 +160,6 @@ async function init() {
         symbol.src = data[i].Photo;
         symbol.className = 'picture';
         symbol.setAttribute("draggable", false);
-        // symbol.textContent = data[i].Name;
         container.appendChild(symbol);
 
         const details = document.createElement('div');
@@ -142,7 +183,6 @@ async function init() {
         const object = new THREE.Object3D();
         object.position.x = ((i % 20) * (gap + width)) - (20 * width + 19 * gap) / 2;
         object.position.y = - (Math.floor(i / 20) * (gap + height)) + (10 * height + 9 * gap) / 2;
-        // console.log(i%20, object.position.x, object.position.y);
 
         targets.table.push(object);
 
