@@ -14,12 +14,12 @@ await init();
 animate();
 
 function parse_csv_line(line) {
-    var values = [];
+    let values = [];
 
-    var start = 0;
-    var end = 0;
-    var in_string = false;
-    for (var i = 0; i < line.length; i++) {
+    let start = 0;
+    let end = 0;
+    let in_string = false;
+    for (let i = 0; i < line.length; i++) {
         switch (line[i]) {
             case '"':
                 if (!in_string) {
@@ -55,7 +55,7 @@ async function init() {
     const rows = csvText.split("\n");
     const headers = rows.shift().split(",");
 
-    for (var i = 0; i < headers.length; i++) {
+    for (let i = 0; i < headers.length; i++) {
         headers[i] = headers[i].replaceAll('"', '');
     }
 
@@ -65,8 +65,8 @@ async function init() {
     const data = rows.map(row => {
         const values = parse_csv_line(row);
 
-        var object = {};
-        for (var i = 0; i < headers.length; i++) {
+        let object = {};
+        for (let i = 0; i < headers.length; i++) {
             object[headers[i]] = values[i];
         }
 
@@ -171,10 +171,10 @@ async function init() {
 
     // helix
 
-    for (let i = 0, l = objects.length; i < l; i++) {
+    for (let i = 0; i < objects.length / 2; i++) {
 
         const theta = i * 0.175 + Math.PI;
-        const y = - (i * 8) + 450;
+        const y = - (i * 32) + 1600;
 
         const object = new THREE.Object3D();
 
@@ -187,12 +187,29 @@ async function init() {
         object.lookAt(vector);
 
         targets.helix.push(object);
+    }
 
+    for (let i = 0; i < objects.length / 2; i++) {
+
+        const theta = i * 0.175 + 2 * Math.PI;
+        const y = - (i * 32) + 1600;
+
+        const object = new THREE.Object3D();
+
+        object.position.setFromCylindricalCoords(900, theta, y);
+
+        vector.x = object.position.x * 2;
+        vector.y = object.position.y;
+        vector.z = object.position.z * 2;
+
+        object.lookAt(vector);
+
+        targets.helix.push(object);
     }
 
     // grid
 
-    var x = 0;
+    let x = 0;
     for (let i = 0; i < objects.length; i++) {
 
         const object = new THREE.Object3D();
