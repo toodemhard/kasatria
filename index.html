@@ -36,10 +36,9 @@
 		<div class="g_id_signin" id="login" data-type="standard"></div>
 	</div>
 
-	<script type="module">
+	<script>
 		window.onSignIn = function(response) {
-			console.log(import.meta.env.BASE_URL + "periodic_table");
-			window.location.pathname = import.meta.env.BASE_URL + "periodic_table"
+			window.location.pathname += "periodic_table";
 		}
 	</script>
 </body>
