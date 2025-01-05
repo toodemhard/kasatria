@@ -3,12 +3,45 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="google-signin-client_id" content="7804247256-2e8aramaqgk0nggraa1pjr8rs9j1fg3q.apps.googleusercontent.com">
-	<title>Document</title>
+	<link type="text/css" rel="stylesheet" href="main.css">
+	<style>
+		#login {
+			width: fit-content;
+			/* padding-top: 100px; */
+			/* padding: 10rem; */
+			border-radius: 1rem;
+			
+		}
+
+		.container {
+			width: 100%;
+			height: 100vh;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+	</style>
+	<title>Assignment - Login</title>
 </head>
 <body>
-	<script type="module" src="script.js"></script>
-	<!-- <script src="https://apis.google.com/js/platform.js" async defer></script>
-	<div class="g-signin2" data-onsuccess="onSignIn"></div> -->
+	<script src="https://accounts.google.com/gsi/client" async defer></script>
+    <div id="g_id_onload"
+         data-client_id="1057649292100-noigudtl384i95p3td484eftu5c4i67m.apps.googleusercontent.com"
+         data-callback="onSignIn">
+    </div>
+
+	<div class="container">
+		<div class="g_id_signin" id="login" data-type="standard"></div>
+	</div>
+
+	<script>
+		function onSignIn(response) {
+			// console.log(response.credential);
+			window.location.pathname = "/periodic_table"
+		}
+
+	</script>
 </body>
 </html>
