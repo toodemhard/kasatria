@@ -211,28 +211,41 @@ async function init() {
 
     // table
 
-    for (let i = 0; i < data.length; i += 5) {
-
+    for (let i = 0; i < data.length; i++) {
+        
         const element = document.createElement('div');
         element.className = 'element';
         element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')';
 
+        const container = document.createElement("div");
+        container.className = "container";
+        element.appendChild(container)
+        
+        const row = document.createElement('div');
+        row.className = "row"
+        container.appendChild(row);
+
+        const country = document.createElement('div');
+        country.className = 'number';
+        country.textContent = data[i].Country;
+        row.appendChild(country);
+
         const number = document.createElement('div');
         number.className = 'number';
-        number.textContent = (i / 5) + 1;
-        element.appendChild(number);
+        number.textContent = i;
+        row.appendChild(number);
 
-        const symbol = document.createElement('div');
-        symbol.className = 'symbol';
-        symbol.textContent = data[i].Name;
-        console.log(data[i]);
-        console.log(Object.keys(data[i]));
-        element.appendChild(symbol);
+        const symbol = document.createElement('img');
+        symbol.src = data[i].Photo;
+        symbol.className = 'picture';
+        symbol.setAttribute("draggable", false);
+        // symbol.textContent = data[i].Name;
+        container.appendChild(symbol);
 
         const details = document.createElement('div');
         details.className = 'details';
-        details.innerHTML = table[i + 1] + '<br>' + table[i + 2];
-        element.appendChild(details);
+        details.innerHTML = "<strong>" + data[i].Name + "</strong>" + '<br>' + data[i].Interest;
+        container.appendChild(details);
 
         const objectCSS = new CSS3DObject(element);
         objectCSS.position.x = Math.random() * 4000 - 2000;
@@ -244,10 +257,13 @@ async function init() {
 
         //
 
+        const gap = 20;
+        const width = 150;
+        const height = 200;
         const object = new THREE.Object3D();
-        object.position.x = ((i % 20) * 140) - 1330;
-        object.position.y = - (Math.floor(i / 20) * 180) + 990;
-        console.log(object.position.x, object.position.y);
+        object.position.x = ((i % 20) * (gap + width)) - 1330;
+        object.position.y = - (Math.floor(i / 20) * (gap + height)) + 990;
+        console.log(i%20, object.position.x, object.position.y);
 
         targets.table.push(object);
 
@@ -302,12 +318,14 @@ async function init() {
         const object = new THREE.Object3D();
 
         object.position.x = ((i % 5) * 400) - 800;
-        object.position.y = (- (Math.floor(i / 5) % 5) * 400) + 800;
-        object.position.z = (Math.floor(i / 25)) * 1000 - 2000;
+        object.position.y = (- (Math.floor(i / 4) % 4) * 400) + 800;
+        object.position.z = (Math.floor(i / 20)) * 1000 - 5000;
 
         targets.grid.push(object);
 
     }
+
+    console.log(objects.length);
 
     //
 
